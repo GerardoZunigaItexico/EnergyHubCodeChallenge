@@ -1,5 +1,6 @@
 package com.improving.energyhub;
 
+import com.improving.energyhub.processor.ArgumentValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -21,11 +22,8 @@ public class SpringBootConsoleApplication
     }
 
     @Override
-    public void run(String... args) {
-        LOG.info("EXECUTING : command line runner");
+    public void run(String... args) throws Exception {
+        new ArgumentValidator().validateArguments(args);
 
-        for (int i = 0; i < args.length; ++i) {
-            LOG.info("args[{}]: {}", i, args[i]);
-        }
     }
 }
