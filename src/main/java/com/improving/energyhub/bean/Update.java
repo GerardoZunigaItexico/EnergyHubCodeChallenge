@@ -1,19 +1,25 @@
 package com.improving.energyhub.bean;
 
+import java.util.Date;
+
 public class Update {
-    private float ambientTemp;
+    private Float ambientTemp;
 
     private String mode;
 
-    private float heatTemp;
+    private Float heatTemp;
 
-    private boolean schedule;
+    private Boolean schedule;
 
-    public float getAmbientTemp() {
+    private Float coolTemp;
+
+    private Date lastAlertTs;
+
+    public Float getAmbientTemp() {
         return ambientTemp;
     }
 
-    public void setAmbientTemp(float ambientTemp) {
+    public void setAmbientTemp(Float ambientTemp) {
         this.ambientTemp = ambientTemp;
     }
 
@@ -25,19 +31,35 @@ public class Update {
         this.mode = mode;
     }
 
-    public float getHeatTemp() {
+    public Float getHeatTemp() {
         return heatTemp;
     }
 
-    public void setHeatTemp(float heatTemp) {
+    public void setHeatTemp(Float heatTemp) {
         this.heatTemp = heatTemp;
     }
 
-    public boolean isSchedule() {
+    public Boolean getSchedule() {
         return schedule;
     }
 
-    public void setSchedule(boolean schedule) {
+    public void setSchedule(Boolean schedule) {
         this.schedule = schedule;
+    }
+
+    public Float getCoolTemp() {
+        return coolTemp;
+    }
+
+    public void setCoolTemp(Float coolTemp) {
+        this.coolTemp = coolTemp;
+    }
+
+    public Date getLastAlertTs() {
+        return lastAlertTs;
+    }
+
+    public void setLastAlertTs(Date lastAlertTs) {
+        this.lastAlertTs = lastAlertTs;
     }
 }

@@ -1,5 +1,6 @@
 package com.improving.energyhub.processor;
 
+import com.sun.media.sound.InvalidDataException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -49,14 +50,14 @@ public class ArgumentValidatorTest {
         }
     }
 
-    @Test(expected = Exception.class)
+    @Test(expected = InvalidDataException.class)
     public void testInvalidFourArguments() throws Exception {
         ArgumentValidator argumentValidator = new ArgumentValidator();
         List<String> arguments = Arrays.asList("_Hello","tempetureAmbient", "thermostat-data.jsonl.gz","2016-01-01T03:00:00.000000");
         argumentValidator.validateArguments( arguments.stream().toArray(String[]::new) );
     }
 
-    @Test(expected = Exception.class)
+    @Test(expected = InvalidDataException.class)
     public void testFirstArgumentInvalid() throws Exception {
         ArgumentValidator argumentValidator = new ArgumentValidator();
         List<String> arguments = Arrays.asList("tempetureAmbient", "thermostat-data.jsonl.gz","2016-01-01T03:00:00.000000");

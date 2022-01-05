@@ -1,5 +1,6 @@
 package com.improving.energyhub;
 
+import com.improving.energyhub.bean.InputData;
 import com.improving.energyhub.processor.ArgumentValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +24,7 @@ public class SpringBootConsoleApplication
 
     @Override
     public void run(String... args) throws Exception {
-        new ArgumentValidator().validateArguments(args);
+        InputData inputData = new ArgumentValidator().validateArguments(args);
 
     }
 }

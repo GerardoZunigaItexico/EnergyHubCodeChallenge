@@ -12,6 +12,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import com.improving.energyhub.bean.InputData;
 import com.improving.energyhub.bean.Update;
 import com.sun.media.sound.InvalidDataException;
 import org.jetbrains.annotations.Nullable;
@@ -22,12 +23,12 @@ public class ArgumentValidator {
     private List<String> fileValidExtensions = Arrays.asList("gz", "jsonl","json");
     private List<String> firstAttributeValidFields = new ArrayList<>();
 
-    private @Nullable Exception validateFirstArgument(String firstArgument) {
+    private @Nullable String validateFirstArgument(String firstArgument) throws InvalidDataException{
         getFieldList();
         if (!firstAttributeValidFields.contains(firstArgument)){
-            return new Exception("The input Argument " + firstArgument  + " is not a valid Event Name");
+            throw new InvalidDataException("The input Argument " + firstArgument  + " is not a valid Event Name");
         }
-        return null;
+        return firstArgument;
     }
 
     private void getFieldList() {
@@ -39,7 +40,7 @@ public class ArgumentValidator {
         }
     }
 
-    private void validateSecondArgument(String secondArgument) throws FileNotFoundException, IllegalArgumentException{
+    private File validateSecondArgument(String secondArgument) throws FileNotFoundException, IllegalArgumentException{
         Optional<String> fileExtension = Optional.ofNullable(secondArgument)
                 .filter(f -> f.contains("."))
                 .map(f -> f.substring(secondArgument.lastIndexOf(".") + 1));
@@ -54,28 +55,29 @@ public class ArgumentValidator {
         if (!file.exists()) {
             throw new FileNotFoundException("The file " + secondArgument + " doesn't exists");
         }
+        return file;
     }
 
     // I used this validation format because the defined in the data was generating problems to be parsed.
     // yyyy-MM-dd'T'HH:mm:ss
     // At the same time, I read multiple articles related with that but this one guide me to resolve the issue
     // https://stackoverflow.com/questions/15730298/java-format-yyyy-mm-ddthhmmss-sssz-to-yyyy-mm-dd-hhmmss
-    private void validateThirdArgument(String thirdArgument) throws ParseException {
+    private Date validateThirdArgument(String thirdArgument) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat(this.dateFormat);
-        Date d = sdf.parse(thirdArgument);
+        Date date = sdf.parse(thirdArgument);
+        return date;
     }
 
-    public void validateArguments(String []args) throws Exception {
+    public InputData validateArguments(String []args) throws Exception {
         if(args.length!= 3){
             throw new InvalidDataException("There are expected 3 parameters, and there arrived " + args.length);
         }
 
         Exception exception;
-        exception = validateFirstArgument(args[0]);
-        if(exception != null){
-            throw exception;
-        }
-        validateSecondArgument(args[1]);
-        validateThirdArgument(args[2]);
+        String fetchEvent = validateFirstArgument(args[0]);
+        File file = validateSecondArgument(args[1]);
+        Date date = validateThirdArgument(args[2]);
+
+        return new InputData(fetchEvent, file, date);
     }
 }
