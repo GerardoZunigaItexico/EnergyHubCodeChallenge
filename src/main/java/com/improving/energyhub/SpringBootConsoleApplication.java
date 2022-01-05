@@ -2,6 +2,7 @@ package com.improving.energyhub;
 
 import com.improving.energyhub.bean.InputData;
 import com.improving.energyhub.processor.ArgumentValidator;
+import com.improving.energyhub.processor.EventProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -25,6 +26,13 @@ public class SpringBootConsoleApplication
     @Override
     public void run(String... args) throws Exception {
         InputData inputData = new ArgumentValidator().validateArguments(args);
+        EventProcessor eventProcessor = new EventProcessor();
+        Object object = eventProcessor.fetchEvent(inputData);
+        if (object == null ){
+            LOG.info("There was not found a Entry with the requested Data", inputData.toString());
+        } else{
+            LOG.info("The current value is: ", object.);
+        }
 
     }
 }

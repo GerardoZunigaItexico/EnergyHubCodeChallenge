@@ -22,6 +22,7 @@ public class EventProcessor {
     private static Logger LOG = LoggerFactory
             .getLogger(SpringBootConsoleApplication.class);
 
+    //TODO: This method should to return a value with the respective type instead an object
     public Object fetchEvent(InputData inputData) throws IOException {
 
         if (inputData.getJsonFile().getName().contains("gz")) {
@@ -85,6 +86,7 @@ public class EventProcessor {
 
     //Note: I did this method manually because the guava and apache comparator methods were more difficult to implement for me.
     // I don't have a fresh use of them, so this version is more complex and difficult to support but I guess that it is working.
+    //TODO: this part should to be refactorized because each new attributer to the class requires a new if. I need to implement refelction here too
     private Event getDifference(Event currentEvent, Event newEvent) throws IllegalAccessException {
         if (currentEvent == null) {
             return (Event) newEvent;
@@ -102,9 +104,17 @@ public class EventProcessor {
         if (newEvent.getUpdate().getSchedule() != null && currentEvent.getUpdate().getSchedule() != newEvent.getUpdate().getSchedule()) {
             currentEvent.getUpdate().setSchedule(newEvent.getUpdate().getSchedule());
         }
+        if (newEvent.getUpdate().getCoolTemp() != null && currentEvent.getUpdate().getCoolTemp() != newEvent.getUpdate().getCoolTemp()) {
+            currentEvent.getUpdate().setCoolTemp(newEvent.getUpdate().getCoolTemp());
+        }
+        if (newEvent.getUpdate().getLastAlertTs() != null && currentEvent.getUpdate().getLastAlertTs() != newEvent.getUpdate().getLastAlertTs()) {
+            currentEvent.getUpdate().setLastAlertTs(newEvent.getUpdate().getLastAlertTs());
+        }
         return currentEvent;
     }
 
+    //TODO: This method should to return a value with the respective type instead an object
+    // but I didn't have the enough time to do it
     private Object fetchEventFromData(Event currentEvent, String eventName, Date rangeDate) throws IllegalAccessException, NoSuchFieldException {
         if( rangeDate.before(currentEvent.getUpdateTime() ) ){
             Field field = Update.class.getDeclaredField(eventName);

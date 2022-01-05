@@ -100,26 +100,44 @@ public class EventProcessorTest {
 
     @Test(expected = Test.None.class)
     public void testReadGzFileCoolTemp() throws IOException, ParseException {
-        inputGZData = new InputData("coolTemp", new File("src/test/resources/thermostat-data.jsonl.gz"), new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse("2016-08-10T05:45:30.001255"));
+        inputGZData = new InputData("coolTemp", new File("src/test/resources/thermostat-data.jsonl.gz"), new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse("2016-09-02T00:40:30.009541"));
         EventProcessor eventProcessor = new EventProcessor();
         Object object = eventProcessor.fetchEvent(inputGZData);
         assertNotNull(object);
-        assertEquals(71, ((Float) object).floatValue(), .02);
+        assertEquals(81, ((Float) object).floatValue(), .02);
     }
 
+    @Test(expected = Test.None.class)
     public void testReadJsonFileLastAlertTs() throws IOException, ParseException {
-        inputJsonData = new InputData("lastAlertTs", new File("src/test/resources/thermostat-data.jsonl"), new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse("2016-06-10T04:27:30.001272"));
+        inputJsonData = new InputData("lastAlertTs", new File("src/test/resources/thermostat-data.jsonl"), new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse("2016-08-30T04:06:30.004382"));
         EventProcessor eventProcessor = new EventProcessor();
         Object object = eventProcessor.fetchEvent(inputJsonData);
         assertNotNull(object);
-
+        assertEquals("Sat Aug 27 20:20:00 CDT 2016", ((Date) object).toString());
     }
 
     @Test(expected = Test.None.class)
     public void testReadGzFileLastAlertTs() throws IOException, ParseException {
-        inputGZData = new InputData("lastAlertTs", new File("src/test/resources/thermostat-data.jsonl.gz"), new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse("2016-06-10T04:27:30.001272"));
+        inputGZData = new InputData("lastAlertTs", new File("src/test/resources/thermostat-data.jsonl.gz"), new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse("2016-08-30T04:06:30.004382"));
         EventProcessor eventProcessor = new EventProcessor();
         Object object = eventProcessor.fetchEvent(inputGZData);
         assertNotNull(object);
+        assertEquals("Sat Aug 27 20:20:00 CDT 2016", ((Date) object).toString());
+    }
+
+    @Test(expected = Test.None.class)
+    public void testNotFound() throws IOException, ParseException {
+        inputJsonData = new InputData("ambientTemp", new File("src/test/resources/thermostat-data.jsonl"), new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse("2017-01-01T03:00:00.000000"));
+        EventProcessor eventProcessor = new EventProcessor();
+        Object object = eventProcessor.fetchEvent(inputJsonData);
+        assertEquals(object, null);
+    }
+
+    @Test(expected = Test.None.class)
+    public void testReadGzFileAmbientTempNotFound() throws IOException, ParseException {
+        inputGZData = new InputData("ambientTemp", new File("src/test/resources/thermostat-data.jsonl.gz"), new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse("2017-01-01T03:00:00.000000"));
+        EventProcessor eventProcessor = new EventProcessor();
+        Object object = eventProcessor.fetchEvent(inputGZData);
+        assertEquals(object, null);
     }
 }
