@@ -28,10 +28,11 @@ public class SpringBootConsoleApplication
         InputData inputData = new ArgumentValidator().validateArguments(args);
         EventProcessor eventProcessor = new EventProcessor();
         Object object = eventProcessor.fetchEvent(inputData);
+        String value = object.toString();
         if (object == null ){
             LOG.info("There was not found a Entry with the requested Data", inputData.toString());
         } else{
-            LOG.info("The current value is: ", object.);
+            LOG.info("The current value is: ", value);
         }
 
     }
